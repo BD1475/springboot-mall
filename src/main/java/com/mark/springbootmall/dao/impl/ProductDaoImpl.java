@@ -62,18 +62,45 @@ public class ProductDaoImpl implements ProductDao {
         map.put("description", productRequest.getDescription());
 
         //把這個當下的時間當成是這個商品的創建時間以及最後修改的時間
-        Date now =new Date();
-        map.put("createdDate",now);
-        map.put("lastModifiedDate",now);
+        Date now = new Date();
+        map.put("createdDate", now);
+        map.put("lastModifiedDate", now);
 
         //使用 KeyHolder去儲存資料庫自動生成的 productId
         //然後再將這個 productId給回傳出去
-        KeyHolder keyHolder= new GeneratedKeyHolder();
+        KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        namedParameterJdbcTemplate.update(sql,new MapSqlParameterSource(map),keyHolder);
+        namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map), keyHolder);
 
         int productId = keyHolder.getKey().intValue();
 
         return productId;
+    }
+
+    @Override
+    public void updateProduct(Integer productId, ProductRequest productRequest) {
+        String sql = "UPDATE product\n" +
+                "SET product_name       = :productName,\n" +
+                "    category           = :category,\n" +
+                "    image_url          = :imageUrl,\n" +
+                "    price              = :price,\n" +
+                "    stock              = :stock,\n" +
+                "    description        = :description,\n" +
+                "    last_modified_date = :lastModifiedDate\n" +
+                "WHERE product_id = :productId";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("productId", productId);
+
+        map.put("productName", productRequest.getProductName());
+        map.put("category", productRequest.getCategory().toString());// Enum 類型轉成 String
+        map.put("imageUrl", productRequest.getImageUrl());
+        map.put("price", productRequest.getPrice());
+        map.put("stock", productRequest.getStock());
+        map.put("description", productRequest.getDescription());
+        //紀錄商品最後更新時間
+        map.put("lastModifiedDate", new Date());
+
+        namedParameterJdbcTemplate.update(sql, map);
     }
 }
