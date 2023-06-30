@@ -1,13 +1,13 @@
 package com.mark.springbootmall.controller;
 
+import com.mark.springbootmall.dto.ProductRequest;
 import com.mark.springbootmall.model.Product;
 import com.mark.springbootmall.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ProductController {
@@ -29,4 +29,19 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    @PostMapping("/products")
+    public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductRequest productRequest){
+//  ProductRequest 裡面有 @NotNull 的註解一定要記得加上 @Valid 的註解
+
+//        productService 會提供一個createProduct 的方法 參數就是 productRequest
+//        另外這個 createProduct 的方法他要去返回資料庫所生成的productId
+        Integer productId = productService.createProduct(productRequest);
+
+//        使用這個 productId去查詢這個商品的數據回來
+        Product product = productService.getProductById(productId);
+
+        return  ResponseEntity.status(HttpStatus.CREATED).body(product);
+    }
+
 }
