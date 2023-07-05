@@ -1,5 +1,6 @@
 package com.mark.springbootmall.dao.impl;
 
+import com.mark.springbootmall.constant.ProductCategory;
 import com.mark.springbootmall.dao.ProductDao;
 import com.mark.springbootmall.dto.ProductRequest;
 import com.mark.springbootmall.model.Product;
@@ -24,13 +25,24 @@ public class ProductDaoImpl implements ProductDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getProducts(ProductCategory category, String search) {
         //把 product table 中的所有商品數據全部都去給查詢出來
         String sql = "SELECT product_id, product_name, category, image_url, " +
                 "price, stock, description, created_date, last_modified_date " +
-                "FROM product";
+                "FROM product WHERE 1=1";   //1=1 寫法可以拼接後來加上的sql語句
 
         Map<String, Object> map = new HashMap<>();
+
+        if (category != null) {
+            sql = sql + " AND category = :category";     //AND前一定要預留空格
+            map.put("category", category.name());       //.name是為了轉換文字
+        }
+
+        if (search != null) {
+            sql = sql + " AND product_name LIKE :search";
+            map.put("search", "%" + search + "%"); //表示product_name LIKE '%search%'
+        }
+
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
 
         return productList;
@@ -121,10 +133,10 @@ public class ProductDaoImpl implements ProductDao {
     public void deleteProductById(Integer productId) {
         String sql = "DELETE FROM product WHERE product_id = :productId";
 
-        Map<String,Object> map = new HashMap<>();
-        map.put("productId",productId);
+        Map<String, Object> map = new HashMap<>();
+        map.put("productId", productId);
 
-        namedParameterJdbcTemplate.update(sql,map);
+        namedParameterJdbcTemplate.update(sql, map);
 
     }
 }
