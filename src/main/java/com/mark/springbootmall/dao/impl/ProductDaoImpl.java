@@ -34,13 +34,15 @@ public class ProductDaoImpl implements ProductDao {
 
         if (productQueryParams.getCategory() != null) {
             sql = sql + " AND category = :category";     //AND前一定要預留空格
-            map.put("category", productQueryParams.getCategory());       //.name是為了轉換文字
+            map.put("category", productQueryParams.getCategory().name());       //.name是為了轉換文字
         }
 
         if (productQueryParams.getSearch() != null) {
             sql = sql + " AND product_name LIKE :search";
             map.put("search", "%" + productQueryParams.getSearch() + "%"); //表示product_name LIKE '%search%'
         }
+
+        sql = sql + " ORDER BY " + productQueryParams.getOrderBy() + " " + productQueryParams.getSort();
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
 

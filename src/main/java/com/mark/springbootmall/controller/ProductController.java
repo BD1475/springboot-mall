@@ -23,14 +23,20 @@ public class ProductController {
 //商品列表一定是有很多的商品
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts(
-            //required = false表示說category 這個參數是一個可選的參數
-            @RequestParam(required = false) ProductCategory category,
-            @RequestParam(required = false) String search
+            // 查詢條件 Filtering
+            @RequestParam(required = false) ProductCategory category,//required = false表示 這個參數是一個可選的參數
+            @RequestParam(required = false) String search,
+
+            // 排序 Sorting
+            @RequestParam(defaultValue = "created_date") String orderBy,   //根據什麼樣的欄位來進行排序
+            @RequestParam(defaultValue = "desc") String sort       //使用升序或是降序來排序
     ) {
-        //DAO 新增ProductQueryParams Class 增加程式可讀性
+        //把前端傳過來的 category search 的值給 set 到 productQueryParams 裡面
         ProductQueryParams productQueryParams = new ProductQueryParams();
         productQueryParams.setCategory(category);
         productQueryParams.setSearch(search);
+        productQueryParams.setOrderBy(orderBy);
+        productQueryParams.setSort(sort);
 
         List<Product> productList = productService.getProducts(productQueryParams);
 
