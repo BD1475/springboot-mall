@@ -1,6 +1,7 @@
 package com.mark.springbootmall.controller;
 
 import com.mark.springbootmall.constant.ProductCategory;
+import com.mark.springbootmall.dao.ProductQueryParams;
 import com.mark.springbootmall.dto.ProductRequest;
 import com.mark.springbootmall.model.Product;
 import com.mark.springbootmall.service.ProductService;
@@ -18,15 +19,20 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-//Products這個 s 很重要一定要加 這是在 RESTful 的設計原則
+    //Products這個 s 很重要一定要加 這是在 RESTful 的設計原則
 //商品列表一定是有很多的商品
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts(
-            @RequestParam(required = false) ProductCategory category,
             //required = false表示說category 這個參數是一個可選的參數
+            @RequestParam(required = false) ProductCategory category,
             @RequestParam(required = false) String search
     ) {
-        List<Product> productList = productService.getProducts(category,search);
+        //DAO 新增ProductQueryParams Class 增加程式可讀性
+        ProductQueryParams productQueryParams = new ProductQueryParams();
+        productQueryParams.setCategory(category);
+        productQueryParams.setSearch(search);
+
+        List<Product> productList = productService.getProducts(productQueryParams);
 
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
