@@ -6,9 +6,12 @@ import com.mark.springbootmall.dto.ProductRequest;
 import com.mark.springbootmall.model.Product;
 import com.mark.springbootmall.service.ProductService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +23,8 @@ public class ProductController {
     private ProductService productService;
 
     //Products這個 s 很重要一定要加 這是在 RESTful 的設計原則
-//商品列表一定是有很多的商品
+    //商品列表一定是有很多的商品
+    @Validated
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts(
             // 查詢條件 Filtering
@@ -29,7 +33,13 @@ public class ProductController {
 
             // 排序 Sorting
             @RequestParam(defaultValue = "created_date") String orderBy,   //根據什麼樣的欄位來進行排序
-            @RequestParam(defaultValue = "desc") String sort       //使用升序或是降序來排序
+            @RequestParam(defaultValue = "desc") String sort,       //使用升序或是降序來排序
+
+            // 分頁 Pagination
+            @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,  //要取得幾筆商品數據
+            @RequestParam(defaultValue = "0") @Min(0) Integer offset  //要去跳過多少筆數據
+
+
     ) {
         //把前端傳過來的 category search 的值給 set 到 productQueryParams 裡面
         ProductQueryParams productQueryParams = new ProductQueryParams();
@@ -37,6 +47,8 @@ public class ProductController {
         productQueryParams.setSearch(search);
         productQueryParams.setOrderBy(orderBy);
         productQueryParams.setSort(sort);
+        productQueryParams.setLimit(limit);
+        productQueryParams.setOffset(offset);
 
         List<Product> productList = productService.getProducts(productQueryParams);
 
