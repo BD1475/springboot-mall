@@ -64,7 +64,7 @@ public class ProductController {
         page.setTotal(total);
         page.setResults(productList);
 
-        return ResponseEntity.status(HttpStatus.OK).body(page);
+        return ResponseEntity.ok(page);
     }
 
 
@@ -79,7 +79,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.OK).body(product);
         } else {
             // 404 Not Found 表示這個商品找不到
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
     }
 
