@@ -1,5 +1,6 @@
 package com.mark.springbootmall.dao;
 
+import com.mark.springbootmall.dto.ProductQueryParams;
 import com.mark.springbootmall.dto.ProductRequest;
 import com.mark.springbootmall.model.Product;
 

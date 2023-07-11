@@ -1,7 +1,7 @@
 package com.mark.springbootmall.service;
 
 
-import com.mark.springbootmall.dao.ProductQueryParams;
+import com.mark.springbootmall.dto.ProductQueryParams;
 import com.mark.springbootmall.dto.ProductRequest;
 import com.mark.springbootmall.model.Product;
 

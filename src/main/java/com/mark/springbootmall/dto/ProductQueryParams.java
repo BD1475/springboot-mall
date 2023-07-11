@@ -1,4 +1,4 @@
-package com.mark.springbootmall.dao;
+package com.mark.springbootmall.dto;
 
 import com.mark.springbootmall.constant.ProductCategory;
 
