@@ -2,6 +2,7 @@ package com.mark.springbootmall.service.impl;
 
 
 import com.mark.springbootmall.dao.UserDao;
+import com.mark.springbootmall.dto.UserLoginRequest;
 import com.mark.springbootmall.dto.UserRegisterRequest;
 import com.mark.springbootmall.model.User;
 import com.mark.springbootmall.service.UserService;
@@ -19,8 +20,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
     @Override
-    public User getUserById(Integer userId){
+    public User getUserById(Integer userId) {
         return userDao.getUserById(userId);
     }
 
@@ -30,7 +32,7 @@ public class UserServiceImpl implements UserService {
         // 檢查註冊的 emaill
         User user = userDao.getUserByEmail(userRegisterRequest.getEmail());
 
-        if(user != null){
+        if (user != null) {
             log.warn("該 emaill {} 已被註冊", userRegisterRequest.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -39,5 +41,21 @@ public class UserServiceImpl implements UserService {
         return userDao.createUser(userRegisterRequest);
     }
 
+    @Override
+    public User login(UserLoginRequest userLoginRequest) {
+        // 檢查 email是否註冊過
+        User user = userDao.getUserByEmail(userLoginRequest.getEmail());
 
+        if (user == null) {
+            log.warn("該 emaill {} 尚未註冊", userLoginRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        // 檢查提供的密碼是否與資料庫相同
+        if (user.getPassword().equals(userLoginRequest.getPassword())) {
+            return user;
+        } else {
+            log.warn("該 emaill {} 密碼不正確", userLoginRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
