@@ -13,8 +13,8 @@ public class User {
     @JsonIgnore
     private String password;
 
-    private Date createDate;
-    private Date lasModifiedDate;
+    private Date createdDate;
+    private Date lastModifiedDate;
 
     public Integer getUserId() {
         return userId;
@@ -40,19 +40,19 @@ public class User {
         this.password = password;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreatedDate(Date createDate) {
+        this.createdDate = createDate;
     }
 
-    public Date getLasModifiedDate() {
-        return lasModifiedDate;
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
     }
 
-    public void setLasModifiedDate(Date lasModifiedDate) {
-        this.lasModifiedDate = lasModifiedDate;
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 }
