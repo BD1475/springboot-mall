@@ -4,6 +4,7 @@ import com.mark.springbootmall.dao.OrderDao;
 import com.mark.springbootmall.dao.ProductDao;
 import com.mark.springbootmall.dto.BuyItem;
 import com.mark.springbootmall.dto.CreateOrderRequest;
+import com.mark.springbootmall.model.Order;
 import com.mark.springbootmall.model.OrderItem;
 import com.mark.springbootmall.model.Product;
 import com.mark.springbootmall.service.OrderService;
@@ -22,6 +23,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProductDao productDao;
+
+    @Override
+    public Order getOrderById(Integer orderId) {
+        Order order = orderDao.getOrderById(orderId);
+
+        List<OrderItem> orderItemList = orderDao.getOrderItemsById(orderId);
+
+        order.setOrderItemList(orderItemList);
+
+        return order;
+    }
 
     @Transactional //修改多張資料庫 table 確保一起發生(All or Never)
     @Override
