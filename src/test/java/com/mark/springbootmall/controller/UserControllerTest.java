@@ -102,6 +102,7 @@ public class UserControllerTest {
 
     }
 
+
     //登入
     public void login_success() throws Exception {
         // 先註冊新帳號
@@ -195,7 +196,7 @@ public class UserControllerTest {
     }
 
 
-
+    //建立register 方法 設定創建帳號
     private void register(UserRegisterRequest userRegisterRequest) throws Exception {
         String json = objectMapper.writeValueAsString(userRegisterRequest);
 
