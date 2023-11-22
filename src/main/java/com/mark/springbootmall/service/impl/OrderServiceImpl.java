@@ -68,7 +68,6 @@ public class OrderServiceImpl implements OrderService {
     @Transactional //修改多張資料庫 table 確保一起發生(All or Never)
     @Override
     public Integer createOrder(Integer userId, CreateOrderRequest createOrderRequest) {
-
         // 檢查userId 是否存在
         User user = userDao.getUserById(userId);
 
@@ -93,7 +92,6 @@ public class OrderServiceImpl implements OrderService {
                         buyItem.getProductId(),product.getStock(),buyItem.getQuantity());
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
-
             // 購買後扣除商品庫存
             productDao.updateStock(product.getProductId(), product.getStock() - buyItem.getQuantity());
 
@@ -106,7 +104,6 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setProductId(buyItem.getProductId());
             orderItem.setQuantity(buyItem.getQuantity());
             orderItem.setAmount(amount);
-
             orderItemList.add(orderItem);
 
         }

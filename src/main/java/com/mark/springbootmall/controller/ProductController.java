@@ -67,7 +67,7 @@ public class ProductController {
         return ResponseEntity.ok(page);
     }
 
-
+    //查詢商品
     @GetMapping("/products/{productId}") //前端來請求這個 url 路徑
     public ResponseEntity<Product> getProduct(@PathVariable Integer productId) {
         Product product = productService.getProductById(productId);
@@ -83,6 +83,7 @@ public class ProductController {
         }
     }
 
+    //新增商品
     @PostMapping("/products")
     public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductRequest productRequest) {
 //  ProductRequest 裡面有 @NotNull 的註解一定要記得加上 @Valid 的註解
@@ -98,6 +99,7 @@ public class ProductController {
     }
 
 
+    //更新商品
     @PutMapping("/products/{productId}")
     public ResponseEntity<Product> updateProduct(@PathVariable Integer productId,
                                                  @RequestBody @Valid ProductRequest productRequest) {
@@ -119,6 +121,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(updateProduct);
     }
 
+    //刪除商品
     @DeleteMapping("/products/{productId}")
     public ResponseEntity<?> deleteProductById(@PathVariable Integer productId) {
         productService.deleteProductById(productId);

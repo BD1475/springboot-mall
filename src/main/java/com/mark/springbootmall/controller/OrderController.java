@@ -21,6 +21,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    //查詢訂單
     @GetMapping("/users/{userId}/orders")
     public ResponseEntity<Page<Order>> getOrder(
             @PathVariable Integer userId,
@@ -49,8 +50,7 @@ public class OrderController {
 
     }
 
-
-
+    //創建訂單
     @PostMapping("/users/{userId}/orders")//("電商網站眾多帳號中/userId 的帳號底下/創建一筆訂單出來")
     public ResponseEntity<?> createOrder(@PathVariable Integer userId,
                                          @RequestBody @Valid CreateOrderRequest createOrderRequest){
